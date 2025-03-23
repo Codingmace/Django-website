@@ -1,13 +1,9 @@
 from django.contrib import admin
-
 from django.urls import path, include, re_path
-
 from django.conf import settings
 from django.conf.urls.static import static
-
 from django.contrib.auth import views as auth_views
 from users.views import CustomLoginView, ResetPasswordView, ChangePasswordView
-
 from users.forms import LoginForm
 
 urlpatterns = [
@@ -31,6 +27,8 @@ urlpatterns = [
          name='password_reset_complete'),
 
     path('password-change/', ChangePasswordView.as_view(), name='password_change'),
+
+    path('search/', include('search.urls')), # search App urls under /search/
 
     re_path(r'^oauth/', include('social_django.urls', namespace='social')),
 

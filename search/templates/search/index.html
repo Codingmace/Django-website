@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Search</title>
+</head>
+<body>
+    <h1>Movie Search</h1>
+
+    {% if user.is_authenticated %}
+        <p>Welcome, {{ user.username }}!</p>
+        <a href="{% url 'logout' %}">Logout</a>
+    {% else %}
+        <a href="{% url 'login' %}">Login</a> | <a href="{% url 'signup' %}">Sign Up</a>
+    {% endif %}
+
+    <form method="GET" action="/search/">
+        <input type="text" name="query" value="{{ query }}" placeholder="Search for a movie">
+        <button type="submit">Search</button>
+    </form>
+
+    {% if movies %}
+        <div>
+            <h2>Search Results:</h2>
+            <div>
+                {% for movie in movies %}
+                    <div>
+                        <h3>{{ movie.title }} ({{ movie.year }})</h3>
+                        {% if movie.poster_url %}
+                            <img src="{{ movie.poster_url }}" alt="{{ movie.title }} poster" width="200">
+                        {% else %}
+                            <p>No image available</p>
+                        {% endif %}
+                        <p>Status: {{ movie.available }}</p>
+                        <p>Image Source: <a href="{{ movie.image_source }}" target="_blank">{{ movie.image_source }}</a></p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <p>No results found. Please try again.</p>
+    {% endif %}
+</body>
+</html>
