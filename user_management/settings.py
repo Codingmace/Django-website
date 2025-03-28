@@ -14,6 +14,7 @@ from pathlib import Path
 
 # To keep secret keys in environment variables
 from dotenv import load_dotenv
+import ast
 
 load_dotenv()
 
@@ -32,8 +33,7 @@ SECRET_KEY = str(os.getenv('SECRET_KEY'))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ast.literal_eval((os.getenv("ALLOWED_HOSTS")))
 
 # Application definition
 
