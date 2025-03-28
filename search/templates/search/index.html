@@ -1,6 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+.movie-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-around;
+}
+
+.movie-item {
+    text-align: center;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.movie-poster {
+    width: 300px;
+    height: 300px;
+    border-radius: 8px;
+}
+
+.available {
+    background-color: #04AA6D;
+}
+.unavailable {
+    background-color: red;
+}
+.image-source-btn {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.image-source-btn:hover {
+    background-color: #45a049;
+}
+
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Ensure buttons are next to each other */
+.button-container .button {
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  float: left;
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Search</title>
@@ -20,26 +78,41 @@
         <button type="submit">Search</button>
     </form>
 
-    {% if movies %}
-        <div>
-            <h2>Search Results:</h2>
-            <div>
-                {% for movie in movies %}
-                    <div>
-                        <h3>{{ movie.title }} ({{ movie.year }})</h3>
-                        {% if movie.poster_url %}
-                            <img src="{{ movie.poster_url }}" alt="{{ movie.title }} poster" width="200">
-                        {% else %}
-                            <p>No image available</p>
-                        {% endif %}
-                        <p>Status: {{ movie.available }}</p>
-                        <p>Image Source: <a href="{{ movie.image_source }}" target="_blank">{{ movie.image_source }}</a></p>
+
+<script>
+    function printImageSource(imageSource) {
+        console.log("Image Source: " + imageSource); // Prints to the browser console
+    }
+</script>
+
+{% if movies %}
+    <div>
+        <h2>Search Results:</h2>
+        <div class="movie-container">
+            {% for movie in movies %}
+                <div class="movie-item">
+                    <h3>{{ movie.title }} ({{ movie.year }})</h3>
+                    {% if movie.poster_url %}
+                        <img src="{{ movie.poster_url }}" alt="{{ movie.title }} poster" class="movie-poster">
+                    {% else %}
+                        <p>No image available</p>
+                    {% endif %}
+                    
+                    <div class="button-container">
+                        <button class="button {% if movie.available == 'Available' %}available{% else %}unavailable{% endif %}">
+                            Status: {{ movie.available }}
+                        </button>
+                        
+                        <button class="image-source-btn" onclick="printImageSource('{{ movie.image_source }}')" {% if movie.available != 'Available' %}disabled{% endif %}> Add Movie
+                        </button>
                     </div>
-                {% endfor %}
-            </div>
+                </div>
+            {% endfor %}
         </div>
-    {% else %}
-        <p>No results found. Please try again.</p>
-    {% endif %}
+    </div>
+{% else %}
+    <p>No results found. Please try again.</p>
+{% endif %}
+
 </body>
 </html>
